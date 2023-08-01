@@ -1,0 +1,384 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: KDA RandomCutForest Example
+
+Parameters:
+  FlinkVersion:
+    Description: Flink version to build
+    Type: String
+    Default: 1.15.4
+    AllowedPattern: \d\.\d\d\.\d
+
+  Release:
+    Description: Github branch or release to be used for the consumer application
+    Type: String
+    Default: master
+
+Resources:
+  ArtifactBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+
+  BuildPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: RcfExampleSourceAction
+              ActionTypeId:
+                Category: Source
+                Owner: AWS
+                Version: "1"
+                Provider: S3
+              OutputArtifacts:
+                - Name: RcfExampleSource
+              Configuration:
+                S3Bucket: !Ref ArtifactBucket
+                S3ObjectKey: sources/amazon-kinesis-analytics-rcf-example.zip
+              RunOrder: 1
+        - Name: BuildRcfExample
+          Actions: 
+            - Name: BuildRcfExample
+              InputArtifacts:
+                - Name: RcfExampleSource
+              OutputArtifacts:
+                - Name: BuildRcfExampleOutput
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Version: "1"
+                Provider: CodeBuild
+              Configuration:
+                ProjectName: !Ref RcfExampleBuildProject
+                PrimarySource: RcfExampleSource
+              RunOrder: 1
+        - Name: Copy
+          Actions:
+            - Name: CopyRcfExample
+              InputArtifacts:
+                - Name: BuildRcfExampleOutput
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: "1"
+                Provider: S3
+              Configuration:
+                BucketName: !Ref ArtifactBucket
+                Extract: true
+              RunOrder: 1
+            - Name: NotifyCloudformation
+              ActionTypeId:
+                Category: Invoke
+                Owner: AWS
+                Version: "1"
+                Provider: Lambda
+              Configuration:
+                FunctionName: !Ref NotifyWaitConditionLambdaFunction
+              RunOrder: 2
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactBucket
+
+  BuildCompleteWaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
+    Properties:
+      Count: 1
+      Handle: !Ref BuildCompleteWaitHandle
+      Timeout: "900"
+
+  BuildCompleteWaitHandle:
+    Type: AWS::CloudFormation::WaitConditionHandle
+
+  RcfExampleBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      ServiceRole: !GetAtt CodeBuildServiceRole.Arn
+      Artifacts:
+        Type: CODEPIPELINE
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_LARGE
+        Image: aws/codebuild/java:openjdk-11
+      Source:
+        Type: CODEPIPELINE
+        BuildSpec: !Sub |
+          version: 0.2
+
+          phases:
+            build:
+              commands:
+                - 'cd amazon-kinesis-data-analytics-examples-* || :'
+                - 'cd AnomalyDetection/RandomCutForest || :'
+                - mvn clean package -B -Dflink.version=${FlinkVersion}
+
+          artifacts:
+            files:
+              - target/flink-random-cut-forest-example-*.jar
+              - amazon-kinesis-data-analytics-examples-*/AnomalyDetection/RandomCutForest/target/flink-random-cut-forest-example-*.jar
+            discard-paths: yes
+      TimeoutInMinutes: 5
+
+  NotifyWaitConditionLambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: !Sub |
+          import json
+          import boto3
+          import urllib.request
+
+          code_pipeline = boto3.client('codepipeline')
+
+          def handler(event, context):
+            job_id = event['CodePipeline.job']['id']
+
+            url = '${BuildCompleteWaitHandle}'
+            headers = { "Content-Type": "" }
+            data = { "Status": "SUCCESS", "Reason": "Compilation Succeeded", "UniqueId": "RcfExampleBuildProject", "Data": "Compilation Succeeded" }
+
+            try:
+              req = urllib.request.Request(url, headers=headers, data=bytes(json.dumps(data), encoding="utf-8"), method='PUT')
+              response = urllib.request.urlopen(req)
+
+              code_pipeline.put_job_success_result(jobId=job_id)
+            except Exception as e:
+              print("failure: " + str(e))
+              code_pipeline.put_job_failure_result(jobId=job_id, failureDetails={'message': str(e), 'type': 'JobFailed'})
+
+      Runtime: python3.9
+      Timeout: 10
+
+  DownloadSources:
+    Type: Custom::DownloadSources
+    Properties:
+      ServiceToken: !GetAtt DownloadSourcesFunction.Arn
+
+  DownloadSourcesFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: !Sub |
+          import boto3
+          import cfnresponse
+          from urllib.request import urlopen
+
+          def handler(event, context):
+            s3 = boto3.client('s3')
+            rcf_example_source = urlopen('https://github.com/aws-samples/amazon-kinesis-data-analytics-examples/archive/${Release}.zip')
+
+            s3.put_object(Bucket='${ArtifactBucket}',Key='sources/amazon-kinesis-analytics-rcf-example.zip',Body=rcf_example_source.read())
+
+            cfnresponse.send(event, context, cfnresponse.SUCCESS, {})
+      Runtime: python3.9
+      Timeout: 60
+
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "codepipeline.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource:
+                  - !Sub arn:aws:s3:::${ArtifactBucket}
+                  - !Sub arn:aws:s3:::${ArtifactBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+              - Resource:
+                  - !Sub ${RcfExampleBuildProject.Arn}
+                Effect: Allow
+                Action:
+                  - codebuild:StartBuild
+                  - codebuild:BatchGetBuilds
+              - Resource: !Sub ${NotifyWaitConditionLambdaFunction.Arn}
+                Effect: Allow
+                Action:
+                  - lambda:InvokeFunction
+                  - lambda:InvokeAsync
+
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "codebuild.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource:
+                  - arn:aws:logs:*:*:log-group:/aws/codebuild/*
+                  - arn:aws:logs:*:*:log-group:/aws/codebuild/*:log-stream:*
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              - Resource:
+                  - !Sub arn:aws:s3:::${ArtifactBucket}
+                  - !Sub arn:aws:s3:::${ArtifactBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:GetObjectVersion
+                  - s3:ListBucket
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Resource: "*"
+                Effect: Allow
+                Action:
+                  - codepipeline:PutJobSuccessResult
+                  - codepipeline:PutJobFailureResult
+              - Resource:
+                  - arn:aws:logs:*:*:log-group:/aws/lambda/*
+                  - arn:aws:logs:*:*:log-group:/aws/lambda/*:log-stream:*
+                Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+              - Resource:
+                  - !Sub arn:aws:s3:::${ArtifactBucket}
+                  - !Sub arn:aws:s3:::${ArtifactBucket}/*
+                Effect: Allow
+                Action:
+                  - s3:PutObject
+
+  InputKinesisStream:
+    Type: 'AWS::Kinesis::Stream'
+    Properties:
+      Name: !Sub 'ExampleInputStream-RCF'
+      ShardCount: 1
+
+  OutputKinesisStream:
+    Type: 'AWS::Kinesis::Stream'
+    Properties:
+      Name: !Sub 'ExampleOutputStream-RCF'
+      ShardCount: 1
+
+  KDAFlinkApplication:
+    Type: 'AWS::KinesisAnalyticsV2::Application'
+    Properties:
+      ApplicationName: !Sub '${AWS::StackName}-rcfExample'
+      ApplicationDescription: >-
+        This application computes anomaly score via RandomCutForest algorithm
+      RuntimeEnvironment: FLINK-1_15
+      ServiceExecutionRole: !GetAtt
+        - ServiceExecutionRole
+        - Arn
+      ApplicationConfiguration:
+        ApplicationCodeConfiguration:
+          CodeContent:
+            S3ContentLocation:
+              BucketARN:
+                Fn::GetAtt:
+                  - ArtifactBucket
+                  - Arn
+              FileKey: >-
+                flink-random-cut-forest-example-1.0.jar
+          CodeContentType: ZIPFILE
+        FlinkApplicationConfiguration:
+          MonitoringConfiguration:
+            ConfigurationType: CUSTOM
+            LogLevel: INFO
+            MetricsLevel: APPLICATION
+        EnvironmentProperties:
+          PropertyGroups:
+            - PropertyGroupId: RcfExampleEnvironment
+              PropertyMap:
+                region: !Sub '${AWS::Region}'
+                inputStreamName: !Ref InputKinesisStream
+                outputStreamName: !Ref OutputKinesisStream
+    DependsOn: BuildCompleteWaitCondition
+
+  ServiceExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: kinesisanalytics.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: Open
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'kinesis:*'
+                Resource:
+                  - !GetAtt
+                    - InputKinesisStream
+                    - Arn
+              - Effect: Allow
+                Action:
+                  - 'kinesis:*'
+                Resource:
+                  - !GetAtt
+                    - OutputKinesisStream
+                    - Arn
+              - Effect: Allow
+                Action:
+                  - 'logs:CreateLogStream'
+                  - 'logs:CreateLogGroup'
+                  - 'logs:PutDestination'
+                  - 'logs:CreateLogDelivery'
+                  - 'logs:PutLogEvents'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                  - 's3:GetObject'
+                Resource: !Sub
+                  - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/flink-random-cut-forest-example-1.0.jar'
+                  - ArtifactBucketPlaceholder: !Ref ArtifactBucket
