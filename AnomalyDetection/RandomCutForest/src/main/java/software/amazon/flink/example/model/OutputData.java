@@ -20,12 +20,12 @@ package software.amazon.flink.example.model;
 
 public class OutputData {
     private long time;
-    private float value;
+    private double ctr;
     private double score;
 
-    public OutputData(long time, float value, double score) {
+    public OutputData(long time, double ctr, double score) {
         this.time = time;
-        this.value = value;
+        this.ctr = ctr;
         this.score = score;
     }
 
@@ -37,12 +37,12 @@ public class OutputData {
         this.time = time;
     }
 
-    public float getValue() {
-        return value;
+    public double getCtr() {
+        return ctr;
     }
 
-    public void setValue(float value) {
-        this.value = value;
+    public void setValue(double ctr) {
+        this.ctr = ctr;
     }
 
     public double getScore() {
@@ -57,7 +57,7 @@ public class OutputData {
     public String toString() {
         return "OutputData{" +
                 "time=" + time +
-                ", value=" + value +
+                ", ctr=" + ctr +
                 ", score=" + score +
                 '}';
     }

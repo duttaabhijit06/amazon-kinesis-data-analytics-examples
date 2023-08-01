@@ -20,7 +20,7 @@ package software.amazon.flink.example.model;
 
 public class InputData {
     private long time;
-    private float value;
+    private double ctr;
 
     public long getTime() {
         return time;
@@ -30,19 +30,19 @@ public class InputData {
         this.time = time;
     }
 
-    public float getValue() {
-        return value;
+    public double getCtr() {
+        return ctr;
     }
 
-    public void setValue(float value) {
-        this.value = value;
+    public void setValue(double ctr) {
+        this.ctr = ctr;
     }
 
     @Override
     public String toString() {
         return "InputData{" +
                 "time=" + time +
-                ", value=" + value +
+                ", ctr=" + ctr +
                 '}';
     }
 }
