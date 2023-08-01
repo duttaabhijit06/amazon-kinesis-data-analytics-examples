@@ -36,10 +36,11 @@ public class FlinkStreamingJob {
     private static DataStream<InputData> createSource(
             final StreamExecutionEnvironment env,
             final String inputStreamName,
-            final String region) {
+            final String region,
+            final String initialPosition) {
         Properties inputProperties = new Properties();
         inputProperties.setProperty(ConsumerConfigConstants.AWS_REGION, region);
-
+        inputProperties.setProperty(ConsumerConfigConstants.STREAM_INITIAL_POSITION, initialPosition);
         return env.addSource(new FlinkKinesisConsumer<>(inputStreamName, new DataSerializationSchema(), inputProperties));
     }
 
@@ -62,16 +63,18 @@ public class FlinkStreamingJob {
         String region = applicationProperties.getProperty("region", "us-west-2");
         String inputStreamName = applicationProperties.getProperty("inputStreamName", "ExampleInputStream-RCF");
         String outputStreamName = applicationProperties.getProperty("outputStreamName", "ExampleOutputStream-RCF");
+        String initialPosition = applicationProperties.getProperty("initialPosition", "TRIM_HORIZON");
 
-        DataStream<InputData> source = createSource(env, inputStreamName, region);
+        DataStream<InputData> source = createSource(env, inputStreamName, region, initialPosition);
 
         RandomCutForestOperator<InputData, OutputData> randomCutForestOperator =
                 RandomCutForestOperator.<InputData, OutputData>builder()
                         .setDimensions(1)
                         .setShingleSize(1)
-                        .setSampleSize(628)
-                        .setInputDataMapper((inputData) -> new float[]{inputData.getValue()})
-                        .setResultMapper(((inputData, score) -> new OutputData(inputData.getTime(), inputData.getValue(), score)))
+                        .setSampleSize(12)
+                        .setNumberOfTrees(100)
+                        .setInputDataMapper((inputData) -> new double[]{inputData.getCtr()})
+                        .setResultMapper(((inputData, score) -> new OutputData(inputData.getTime(), inputData.getCtr(), score)))
                         .build();
 
         source
