@@ -1,0 +1,1287 @@
+﻿{
+  "paragraphs": [
+    {
+      "text": "%flink.ssql\n-- create temporary table to capture website traffic\nDROP TEMPORARY TABLE IF EXISTS website_visit;\n\nCREATE TEMPORARY TABLE website_visit (\n   `browseraction` STRING,\n   `site`          STRING,\n   `rowtime`       TIMESTAMP(3) METADATA FROM 'timestamp',\n   WATERMARK FOR rowtime AS rowtime - INTERVAL '0' SECOND\n) \n WITH (\n   'connector' = 'kinesis',\n   'stream' = 'ticker',\n   'aws.region' = 'us-east-1',\n   'scan.stream.initpos' = 'TRIM_HORIZON',\n   'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T20:56:56+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717005_834698050",
+      "id": "20230801-204516_1629862644",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:171",
+      "dateFinished": "2023-08-01T20:56:57+0000",
+      "dateStarted": "2023-08-01T20:56:56+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update)\n-- Streaming the website traffic data\nselect * from website_visit;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:12:22+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "browseraction": "string",
+                      "site": "string",
+                      "rowtime": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "browseraction\tsite\trowtime\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:19.962\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:20.876\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:22.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:24.822\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:26.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:28.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:30.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:32.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:33.877\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:35.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:37.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:39.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:41.819\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:43.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:45.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:47.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:48.876\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:49.881\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:50.873\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:52.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:54.291\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:54.882\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:56.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:58:58.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:00.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:02.851\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:04.844\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:06.306\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:06.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:07.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:08.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:08.859\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:09.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:10.188\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:10.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:10.846\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:11.182\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:11.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:12.179\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:12.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:12.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:13.174\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:13.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:14.180\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:14.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:14.837\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:15.176\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:15.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:16.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:16.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:16.855\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:17.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:17.877\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:18.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:18.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:18.844\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:19.372\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:19.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:19.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:20.369\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:20.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:20.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:20.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:21.366\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:21.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:21.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:22.358\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:22.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:22.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:22.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:23.356\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:23.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:23.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:24.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:24.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:24.835\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:24.869\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:25.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:25.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:25.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:26.822\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:26.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:26.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:26.852\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:27.822\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:27.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:27.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:28.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:28.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:28.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:28.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:29.818\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:29.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:29.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:30.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:30.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:30.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:30.838\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:31.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:31.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:31.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:32.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:32.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:32.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:32.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:33.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:33.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:33.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:34.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:34.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:34.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:34.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:35.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:35.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:35.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:36.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:36.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:36.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:36.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:37.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:37.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:37.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:38.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:38.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:38.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:38.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:39.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:39.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:39.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:40.822\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:40.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:40.834\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:40.839\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:41.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:41.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:41.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:42.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:42.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:42.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:42.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:43.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:43.833\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:43.835\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:44.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:44.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:44.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:44.830\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:45.820\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:45.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:45.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:46.820\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:46.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:46.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:46.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:47.819\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:47.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:47.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:48.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:48.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:48.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:48.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:49.823\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:49.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:49.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:50.708\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:50.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:50.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:50.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:50.874\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:51.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:51.835\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:51.874\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:51.908\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:52.824\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:52.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:52.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:53.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:53.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:53.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:53.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:54.825\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:54.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:54.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:55.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:55.829\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:55.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:55.832\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:56.820\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:56.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:56.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:57.828\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:57.833\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:57.834\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:57.834\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:58.821\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:58.827\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:58.831\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:59.820\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:59.822\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:59.826\nClick\thttps://www.mydomain.com/\t2023-08-01 20:59:59.829\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:00.823\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:00.825\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:00.834\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:01.820\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:01.821\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:01.823\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:01.828\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:02.821\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:02.828\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:02.829\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:02.874\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:03.828\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:03.829\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:03.830\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:03.874\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:04.820\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:04.821\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:04.824\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:04.873\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:05.512\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:05.822\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:05.827\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:06.307\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:06.669\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:06.820\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:06.825\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:07.172\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:07.817\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:07.822\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:08.176\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:08.381\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:08.825\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:08.827\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:09.359\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:09.825\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:09.829\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:10.355\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:10.822\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:10.827\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:10.855\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:11.355\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:11.818\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:11.826\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:12.821\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:12.821\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:12.841\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:13.182\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:13.828\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:14.819\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:14.844\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:15.289\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:16.292\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:16.820\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:18.824\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:19.874\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:20.878\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:21.875\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:22.879\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:23.874\nClick\thttps://www.mydomain.com/\t2023-08-01 21:00:24.872\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:54.590\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:55.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:56.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:57.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:58.561\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:58.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:59.488\nClick\thttps://www.mydomain.com/\t2023-08-01 21:12:59.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:00.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:00.840\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:01.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:01.820\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:02.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:02.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:03.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:03.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:04.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:04.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:05.804\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:05.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:06.804\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:06.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:07.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:07.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:08.804\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:08.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:09.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:09.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:10.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:10.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:11.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:11.809\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:12.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:12.818\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:13.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:13.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:14.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:14.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:15.814\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:15.819\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:16.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:16.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:17.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:17.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:18.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:18.817\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:19.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:19.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:20.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:20.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:21.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:21.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:22.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:22.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:23.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:23.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:24.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:24.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:25.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:25.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:26.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:26.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:27.809\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:27.809\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:28.814\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:28.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:29.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:29.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:30.809\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:30.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:31.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:31.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:32.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:32.814\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:33.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:33.816\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:34.814\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:34.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:35.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:35.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:36.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:36.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:37.816\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:37.818\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:38.809\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:38.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:39.817\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:39.819\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:40.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:40.818\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:41.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:41.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:42.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:42.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:43.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:43.818\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:44.808\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:44.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:45.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:45.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:46.815\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:46.819\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:47.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:47.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:48.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:48.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:49.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:49.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:50.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:50.812\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:51.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:51.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:52.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:52.816\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:53.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:53.811\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:54.804\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:54.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:55.807\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:56.806\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:57.805\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:58.810\nClick\thttps://www.mydomain.com/\t2023-08-01 21:13:59.813\nClick\thttps://www.mydomain.com/\t2023-08-01 21:14:46.882\nClick\thttps://www.mydomain.com/\t2023-08-01 21:14:46.893\nClick\thttps://www.mydomain.com/\t2023-08-01 21:15:46.890\nClick\thttps://www.mydomain.com/\t2023-08-01 21:15:46.892\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:31.467\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:32.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:33.824\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:34.556\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:35.455\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:36.455\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:37.462\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:38.457\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:39.453\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:40.455\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:41.454\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:42.458\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:43.460\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:44.453\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:45.454\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:46.459\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:47.451\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:48.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:49.829\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:50.824\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:51.453\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:52.454\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:53.454\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:54.829\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:55.626\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:56.455\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:57.457\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:58.457\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:58:59.461\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:00.459\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:01.453\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:02.821\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:03.833\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:04.853\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:05.824\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:06.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:07.823\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:08.825\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:09.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:10.825\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:11.829\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:12.830\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:13.823\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:14.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:15.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:16.822\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:17.823\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:18.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:19.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:20.822\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:21.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:22.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:23.830\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:24.835\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:25.823\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:26.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:27.824\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:28.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:29.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:30.829\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:31.832\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:32.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:33.818\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:34.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:35.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:36.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:37.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:38.822\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:39.826\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:40.829\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:41.827\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:42.830\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:43.833\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:44.823\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:45.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:46.828\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:47.825\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:48.821\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:49.825\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:50.822\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:51.834\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:52.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:53.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:54.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:55.453\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:56.455\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:57.451\nImpression\thttps://www.mydomain.com/\t2023-08-01 20:59:58.452\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:29.196\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:30.192\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:31.190\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:32.188\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:33.192\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:34.189\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:35.191\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:36.188\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:37.192\nImpression\thttps://www.mydomain.com/\t2023-08-01 21:00:38.191\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: select * from website_visit\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>Job was cancelled.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:94)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:49)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callStreamInnerSelect(Flink115SqlInterpreter.java:451)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callSelect(Flink115SqlInterpreter.java:435)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:92)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: e590693b95b7640c9a92dc817a832f40)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: e590693b95b7640c9a92dc817a832f40)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/e590693b95b7640c9a92dc817a832f40",
+              "$$hashKey": "object:12201"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717005_1487880058",
+      "id": "20230801-204516_13226314",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ABORT",
+      "$$hashKey": "object:172",
+      "dateFinished": "2023-08-01T21:16:49+0000",
+      "dateStarted": "2023-08-01T21:09:56+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to generate click traffic\nDROP TEMPORARY TABLE IF EXISTS tmpclickstream;\n\nCREATE TEMPORARY TABLE tmpclickstream (\n    `rowtime`    TIMESTAMP(3),\n    `clickcount` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'clickstream',\n  'aws.region' = 'us-east-1',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:11:06+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717005_1359692217",
+      "id": "20230801-204516_423840387",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:173",
+      "dateFinished": "2023-08-01T21:11:06+0000",
+      "dateStarted": "2023-08-01T21:11:06+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update, parallelism=1)\n-- generating click traffic\nINSERT INTO tmpclickstream SELECT\n  TUMBLE_START(rowtime, INTERVAL '10' SECOND) AS rowtime,\n  COUNT(*) AS clickcount\nFROM website_visit \nWHERE browseraction='Click'\nGROUP BY\n  TUMBLE(rowtime, INTERVAL '10' SECOND);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:11:12+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "msg": [
+          {
+            "data": "<h1>Duration: {{duration}} </h1>\n",
+            "type": "ANGULAR"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/57c28803b4b3a507012c7e77a05ca3a9",
+              "$$hashKey": "object:4374"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717005_515066296",
+      "id": "20230801-204516_1106449814",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "RUNNING",
+      "$$hashKey": "object:174",
+      "dateStarted": "2023-08-01T21:11:12+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- Viewing the click traffic data\nDROP TABLE IF EXISTS clickstream;\n\nCREATE TABLE clickstream (\n    `rowtime`    TIMESTAMP(3),\n    `clickcount` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'clickstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:11:25+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717005_201127379",
+      "id": "20230801-204516_231601478",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:175",
+      "dateFinished": "2023-08-01T21:11:27+0000",
+      "dateStarted": "2023-08-01T21:11:25+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update)\nselect * from clickstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:11:35+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "rowtime": "string",
+                      "clickcount": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "rowtime\tclickcount\n2023-08-01 20:58:10.000\t1.0\n2023-08-01 20:58:20.000\t5.0\n2023-08-01 20:58:30.000\t6.0\n2023-08-01 20:58:40.000\t6.0\n2023-08-01 20:58:50.000\t6.0\n2023-08-01 20:59:00.000\t9.0\n2023-08-01 20:59:10.000\t26.0\n2023-08-01 20:59:20.000\t35.0\n2023-08-01 20:59:30.000\t35.0\n2023-08-01 20:59:40.000\t35.0\n2023-08-01 20:59:50.000\t37.0\n2023-08-01 21:00:00.000\t36.0\n2023-08-01 21:00:10.000\t19.0\n2023-08-01 21:00:20.000\t5.0\n2023-08-01 21:12:50.000\t8.0\n2023-08-01 21:13:00.000\t20.0\n2023-08-01 21:13:10.000\t20.0\n2023-08-01 21:13:20.000\t20.0\n2023-08-01 21:13:30.000\t20.0\n2023-08-01 21:13:40.000\t20.0\n2023-08-01 21:13:50.000\t15.0\n2023-08-01 21:14:40.000\t2.0\n2023-08-01 21:15:40.000\t2.0\n2023-08-01 21:16:40.000\t2.0\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: select * from clickstream\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>Job was cancelled.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:94)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:49)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callStreamInnerSelect(Flink115SqlInterpreter.java:451)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callSelect(Flink115SqlInterpreter.java:435)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:92)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 936b9f771be8b08d3b0b04ad7a92f550)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 936b9f771be8b08d3b0b04ad7a92f550)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/936b9f771be8b08d3b0b04ad7a92f550",
+              "$$hashKey": "object:13950"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717009_645836936",
+      "id": "20230801-204516_1136666164",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ABORT",
+      "$$hashKey": "object:176",
+      "dateFinished": "2023-08-01T21:17:58+0000",
+      "dateStarted": "2023-08-01T21:11:31+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to generate impression traffic\nDROP TEMPORARY TABLE IF EXISTS tmpimpressionstream;\n\nCREATE TEMPORARY TABLE tmpimpressionstream (\n    `rowtime`    TIMESTAMP(3),\n    `impressioncount` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'impressionstream',\n  'aws.region' = 'us-east-1',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:16:01+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717009_2079762775",
+      "id": "20230801-204516_1087667101",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:177",
+      "dateFinished": "2023-08-01T21:16:01+0000",
+      "dateStarted": "2023-08-01T21:16:01+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update, parallelism=1)\n-- generating impression traffic\nINSERT INTO tmpimpressionstream SELECT\n  TUMBLE_START(rowtime, INTERVAL '10' SECOND) AS rowtime,\n  COUNT(*) AS impressioncount\nFROM website_visit \nWHERE browseraction='Impression'\nGROUP BY\n  TUMBLE(rowtime, INTERVAL '10' SECOND);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:16:08+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "ANGULAR",
+            "data": "<h1>Duration: {{duration}} </h1>\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: INSERT INTO tmpimpressionstream SELECT\n  TUMBLE_START(rowtime, INTERVAL '10' SECOND) AS rowtime,\n  COUNT(*) AS impressioncount\nFROM website_visit \nWHERE browseraction='Impression'\nGROUP BY\n  TUMBLE(rowtime, INTERVAL '10' SECOND)\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>RuntimeException: Retries exceeded for getRecords operation - all 3 retry attempts failed.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.io.IOException: Flink job is failed\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callInserts(Flink115SqlInterpreter.java:397)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callInsert(Flink115SqlInterpreter.java:371)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:287)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callInserts(Flink115SqlInterpreter.java:385)\n\t... 16 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: c516ef504d5498a409539948bed65e97)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: c516ef504d5498a409539948bed65e97)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobExecutionException: Job execution failed.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:144)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\nCaused by: org.apache.flink.runtime.JobException: Recovery is suppressed by NoRestartBackoffTimeStrategy\n\tat org.apache.flink.runtime.executiongraph.failover.flip1.ExecutionFailureHandler.handleFailure(ExecutionFailureHandler.java:138)\n\tat org.apache.flink.runtime.executiongraph.failover.flip1.ExecutionFailureHandler.getFailureHandlingResult(ExecutionFailureHandler.java:82)\n\tat org.apache.flink.runtime.scheduler.DefaultScheduler.handleTaskFailure(DefaultScheduler.java:309)\n\tat org.apache.flink.runtime.scheduler.DefaultScheduler.maybeHandleTaskFailure(DefaultScheduler.java:299)\n\tat org.apache.flink.runtime.scheduler.DefaultScheduler.updateTaskExecutionStateInternal(DefaultScheduler.java:290)\n\tat org.apache.flink.runtime.scheduler.SchedulerBase.updateTaskExecutionState(SchedulerBase.java:787)\n\tat org.apache.flink.runtime.scheduler.SchedulerNG.updateTaskExecutionState(SchedulerNG.java:78)\n\tat org.apache.flink.runtime.jobmaster.JobMaster.updateTaskExecutionState(JobMaster.java:451)\n\tat jdk.internal.reflect.GeneratedMethodAccessor123.invoke(Unknown Source)\n\tat java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.base/java.lang.reflect.Method.invoke(Method.java:566)\n\tat org.apache.flink.runtime.rpc.akka.AkkaRpcActor.lambda$handleRpcInvocation$1(AkkaRpcActor.java:304)\n\tat org.apache.flink.runtime.concurrent.akka.ClassLoadingUtils.runWithContextClassLoader(ClassLoadingUtils.java:83)\n\tat org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleRpcInvocation(AkkaRpcActor.java:302)\n\tat org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleRpcMessage(AkkaRpcActor.java:217)\n\tat org.apache.flink.runtime.rpc.akka.FencedAkkaRpcActor.handleRpcMessage(FencedAkkaRpcActor.java:78)\n\tat org.apache.flink.runtime.rpc.akka.AkkaRpcActor.handleMessage(AkkaRpcActor.java:163)\n\tat akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:24)\n\tat akka.japi.pf.UnitCaseStatement.apply(CaseStatements.scala:20)\n\tat scala.PartialFunction.applyOrElse(PartialFunction.scala:123)\n\tat scala.PartialFunction.applyOrElse$(PartialFunction.scala:122)\n\tat akka.japi.pf.UnitCaseStatement.applyOrElse(CaseStatements.scala:20)\n\tat scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:171)\n\tat scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:172)\n\tat scala.PartialFunction$OrElse.applyOrElse(PartialFunction.scala:172)\n\tat akka.actor.Actor.aroundReceive(Actor.scala:537)\n\tat akka.actor.Actor.aroundReceive$(Actor.scala:535)\n\tat akka.actor.AbstractActor.aroundReceive(AbstractActor.scala:220)\n\tat akka.actor.ActorCell.receiveMessage(ActorCell.scala:580)\n\tat akka.actor.ActorCell.invoke(ActorCell.scala:548)\n\tat akka.dispatch.Mailbox.processMailbox(Mailbox.scala:270)\n\tat akka.dispatch.Mailbox.run(Mailbox.scala:231)\n\tat akka.dispatch.Mailbox.exec(Mailbox.scala:243)\n\tat java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:290)\n\tat java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1020)\n\tat java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1656)\n\tat java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1594)\n\tat java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:183)\nCaused by: java.lang.RuntimeException: Retries exceeded for getRecords operation - all 3 retry attempts failed.\n\tat org.apache.flink.streaming.connectors.kinesis.proxy.KinesisProxy.getRecords(KinesisProxy.java:320)\n\tat org.apache.flink.streaming.connectors.kinesis.internals.publisher.polling.PollingRecordPublisher.getRecords(PollingRecordPublisher.java:168)\n\tat org.apache.flink.streaming.connectors.kinesis.internals.publisher.polling.PollingRecordPublisher.run(PollingRecordPublisher.java:113)\n\tat org.apache.flink.streaming.connectors.kinesis.internals.publisher.polling.PollingRecordPublisher.run(PollingRecordPublisher.java:102)\n\tat org.apache.flink.streaming.connectors.kinesis.internals.ShardConsumer.run(ShardConsumer.java:114)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:515)\n\tat java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/c516ef504d5498a409539948bed65e97",
+              "$$hashKey": "object:14108"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717009_1272534047",
+      "id": "20230801-204516_424843700",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ERROR",
+      "$$hashKey": "object:178",
+      "dateFinished": "2023-08-01T21:18:02+0000",
+      "dateStarted": "2023-08-01T21:16:08+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- Viewing the impression traffic data\nDROP TABLE IF EXISTS impressionstream;\n\nCREATE TABLE impressionstream (\n    `rowtime`    TIMESTAMP(3),\n    `impressioncount` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'impressionstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:16:20+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717009_1390216466",
+      "id": "20230801-204516_2077702173",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:179",
+      "dateFinished": "2023-08-01T21:16:21+0000",
+      "dateStarted": "2023-08-01T21:16:20+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update)\nselect * from impressionstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:17:02+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "rowtime": "string",
+                      "impressioncount": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "rowtime\timpressioncount\n2023-08-01 20:58:30.000\t9.0\n2023-08-01 20:58:30.000\t9.0\n2023-08-01 20:58:40.000\t10.0\n2023-08-01 20:58:40.000\t10.0\n2023-08-01 20:58:50.000\t10.0\n2023-08-01 20:58:50.000\t10.0\n2023-08-01 20:59:00.000\t10.0\n2023-08-01 20:59:00.000\t10.0\n2023-08-01 20:59:10.000\t10.0\n2023-08-01 20:59:10.000\t10.0\n2023-08-01 20:59:20.000\t10.0\n2023-08-01 20:59:20.000\t10.0\n2023-08-01 20:59:30.000\t10.0\n2023-08-01 20:59:30.000\t10.0\n2023-08-01 20:59:40.000\t10.0\n2023-08-01 20:59:40.000\t10.0\n2023-08-01 20:59:50.000\t9.0\n2023-08-01 20:59:50.000\t9.0\n2023-08-01 21:00:20.000\t1.0\n2023-08-01 21:00:20.000\t1.0\n2023-08-01 21:00:30.000\t9.0\n2023-08-01 21:00:30.000\t9.0\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: select * from impressionstream\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>Job was cancelled.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:94)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:49)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callStreamInnerSelect(Flink115SqlInterpreter.java:451)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callSelect(Flink115SqlInterpreter.java:435)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:92)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: a6ad2e41a27977e587a714505da2868a)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: a6ad2e41a27977e587a714505da2868a)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/a6ad2e41a27977e587a714505da2868a",
+              "$$hashKey": "object:14216"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717009_38211261",
+      "id": "20230801-204516_971264213",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ABORT",
+      "$$hashKey": "object:180",
+      "dateFinished": "2023-08-01T21:18:10+0000",
+      "dateStarted": "2023-08-01T21:17:02+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to generate CTR traffic\nDROP TEMPORARY TABLE IF EXISTS tmpctrstream;\n\nCREATE TEMPORARY TABLE tmpctrstream (\n    `time` BIGINT,\n    `ctr` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'ctrstream',\n  'aws.region' = 'us-east-1',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:17:29+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_1167419577",
+      "id": "20230801-204516_1519373543",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:181",
+      "dateFinished": "2023-08-01T21:17:29+0000",
+      "dateStarted": "2023-08-01T21:17:29+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update, parallelism=1)\n-- generating CTR traffic\nINSERT INTO tmpctrstream \nSELECT unix_timestamp(cast(t1.rowtime as string)) as `time`, ROUND((t2.clickcount / t1.impressioncount * 100), 1)  as ctr \nFROM impressionstream t1 INNER JOIN \n  clickstream t2\nON unix_timestamp(cast(t1.rowtime as string)) = unix_timestamp(cast(t2.rowtime as string));",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:18:17+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/595b381979a0bf77328c8932524b224a",
+              "$$hashKey": "object:14305"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_1611130866",
+      "id": "20230801-204516_1469931835",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "RUNNING",
+      "$$hashKey": "object:182",
+      "dateFinished": "2023-08-01T21:17:48+0000",
+      "dateStarted": "2023-08-01T21:18:17+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- Viewing the CTR traffic data\nDROP TABLE IF EXISTS ctrstream;\n\nCREATE TABLE ctrstream (\n    `time` BIGINT,\n    `ctr` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'ctrstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:18:41+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_945657140",
+      "id": "20230801-204516_365476869",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:183",
+      "dateFinished": "2023-08-01T21:18:42+0000",
+      "dateStarted": "2023-08-01T21:18:41+0000"
+    },
+    {
+      "text": "%flink.ssql\nSELECT * FROM ctrstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:18:50+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "time": "string",
+                      "ctr": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "time\tctr\n1690923510\t66.7\n1690923510\t66.7\n1690923520\t60.0\n1690923520\t60.0\n1690923530\t60.0\n1690923530\t60.0\n1690923540\t90.0\n1690923540\t90.0\n1690923550\t260.0\n1690923550\t260.0\n1690923560\t350.0\n1690923560\t350.0\n1690923570\t350.0\n1690923570\t350.0\n1690923580\t350.0\n1690923580\t350.0\n1690923590\t411.1\n1690923590\t411.1\n1690923620\t500.0\n1690923620\t500.0\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: SELECT * FROM ctrstream\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>Job was cancelled.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:94)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:49)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callStreamInnerSelect(Flink115SqlInterpreter.java:451)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callSelect(Flink115SqlInterpreter.java:435)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:92)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 8b6cf44dc5bc4c91f0e28bf72230e857)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: 8b6cf44dc5bc4c91f0e28bf72230e857)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/8b6cf44dc5bc4c91f0e28bf72230e857",
+              "$$hashKey": "object:18795"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_875229430",
+      "id": "20230801-204516_246494353",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ABORT",
+      "$$hashKey": "object:184",
+      "dateFinished": "2023-08-01T21:29:17+0000",
+      "dateStarted": "2023-08-01T21:18:46+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to view destination traffic\nDROP TEMPORARY TABLE IF EXISTS tmpdestinationstream;\n\nCREATE TEMPORARY TABLE tmpdestinationstream (\n    `time` BIGINT,\n    `ctr` DOUBLE,\n    `score` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'destinationstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:28:15+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_462398724",
+      "id": "20230801-204516_712849748",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:185",
+      "dateFinished": "2023-08-01T21:28:15+0000",
+      "dateStarted": "2023-08-01T21:28:15+0000"
+    },
+    {
+      "text": "%flink.ssql\nselect * from tmpdestinationstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:28:21+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "time": "string",
+                      "ctr": "string",
+                      "score": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "time\tctr\tscore\n1690923510\t66.7\t0.0\n1690923510\t66.7\t0.0\n1690923520\t60.0\t0.0\n1690923520\t60.0\t0.0\n1690923530\t60.0\t0.0\n1690923530\t60.0\t0.0\n1690923540\t90.0\t0.0\n1690923540\t90.0\t0.9987618445689462\n1690923550\t260.0\t0.0\n1690923550\t260.0\t0.9710024053121645\n1690923560\t350.0\t0.0\n1690923560\t350.0\t0.6929116804926027\n1690923570\t350.0\t0.0\n1690923570\t350.0\t0.657418463478852\n1690923580\t350.0\t0.0\n1690923580\t350.0\t0.6331793852778591\n1690923590\t411.1\t0.0\n1690923590\t411.1\t1.190813347560562\n1690923620\t500.0\t1.9357564315520763\n1690923620\t500.0\t1.523778277987814\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Fail to run sql command: select * from tmpdestinationstream\n"
+          },
+          {
+            "type": "ANGULAR",
+            "data": "<div class='container ng-scope' style='padding-left:0px;padding-right:0px;'>\n    <div class='panel panel-danger'>\n        <div class='panel-heading' ng-click='isOpen=!isOpen' ng-init='isOpen=false' style=\"cursor:pointer\">\n            <div class='plainTextContainer' style='font-weight:bolder'><i class=\"fa fa-caret-right fa-fw\" style=\"padding-right:7px;transition:all 0.3s;{{isOpen?'transform:rotate(90deg);transform-origin:25% 45%':''}}\"></i>Job was cancelled.</div>\n        </div>\n        <div class='panel-collapse' uib-collapse='!isOpen'>\n            <div class='text' style='max-height:300px;overflow:auto;padding:10px'>java.lang.RuntimeException: Fail to run update type stream job\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:94)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.lambda$open$0(FlinkStreamSqlInterpreter.java:49)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callStreamInnerSelect(Flink115SqlInterpreter.java:451)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callSelect(Flink115SqlInterpreter.java:435)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.callOperation(Flink115SqlInterpreter.java:290)\n\tat org.apache.zeppelin.flink.Flink115SqlInterpreter.runSqlList(Flink115SqlInterpreter.java:236)\n\tat org.apache.zeppelin.flink.Flink115Shims.runSqlList(Flink115Shims.java:315)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.runSqlList(FlinkStreamSqlInterpreter.java:103)\n\tat org.apache.zeppelin.flink.FlinkSqlInterpreter.internalInterpret(FlinkSqlInterpreter.java:63)\n\tat org.apache.zeppelin.interpreter.AbstractInterpreter.interpret(AbstractInterpreter.java:55)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:110)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:860)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreterServer$InterpretJob.jobRun(RemoteInterpreterServer.java:752)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:132)\n\tat org.apache.zeppelin.scheduler.ParallelScheduler.lambda$runJobInScheduler$0(ParallelScheduler.java:46)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)\n\tat java.base/java.lang.Thread.run(Thread.java:829)\nCaused by: java.io.IOException: Fail to run stream sql job\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:165)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:109)\n\tat org.apache.zeppelin.flink.FlinkStreamSqlInterpreter.callInnerSelect(FlinkStreamSqlInterpreter.java:92)\n\t... 18 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.TableResultImpl.awaitInternal(TableResultImpl.java:118)\n\tat org.apache.flink.table.api.internal.TableResultImpl.await(TableResultImpl.java:81)\n\tat org.apache.zeppelin.flink.sql.AbstractStreamSqlJob.run(AbstractStreamSqlJob.java:154)\n\t... 20 more\nCaused by: org.apache.flink.table.api.TableException: Failed to wait job finish\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:85)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.isFirstRowReady(InsertResultProvider.java:71)\n\tat org.apache.flink.table.api.internal.TableResultImpl.lambda$awaitInternal$1(TableResultImpl.java:105)\n\tat java.base/java.util.concurrent.CompletableFuture$AsyncRun.run(CompletableFuture.java:1736)\n\t... 3 more\nCaused by: java.util.concurrent.ExecutionException: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: ffa4084e99e5c19c44a6fa5a87135d2b)\n\tat java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:395)\n\tat java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:1999)\n\tat org.apache.flink.table.api.internal.InsertResultProvider.hasNext(InsertResultProvider.java:83)\n\t... 6 more\nCaused by: org.apache.flink.client.program.ProgramInvocationException: Job failed (JobID: ffa4084e99e5c19c44a6fa5a87135d2b)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:130)\n\tat java.base/java.util.concurrent.CompletableFuture$UniApply.tryFire(CompletableFuture.java:642)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.client.program.rest.RestClusterClient.lambda$pollResourceAsync$26(RestClusterClient.java:708)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.complete(CompletableFuture.java:2073)\n\tat org.apache.flink.util.concurrent.FutureUtils.lambda$retryOperationWithDelay$9(FutureUtils.java:403)\n\tat java.base/java.util.concurrent.CompletableFuture.uniWhenComplete(CompletableFuture.java:859)\n\tat java.base/java.util.concurrent.CompletableFuture$UniWhenComplete.tryFire(CompletableFuture.java:837)\n\tat java.base/java.util.concurrent.CompletableFuture.postComplete(CompletableFuture.java:506)\n\tat java.base/java.util.concurrent.CompletableFuture.postFire(CompletableFuture.java:610)\n\tat java.base/java.util.concurrent.CompletableFuture$UniCompose.tryFire(CompletableFuture.java:1085)\n\tat java.base/java.util.concurrent.CompletableFuture$Completion.run(CompletableFuture.java:478)\n\t... 3 more\nCaused by: org.apache.flink.runtime.client.JobCancellationException: Job was cancelled.\n\tat org.apache.flink.runtime.jobmaster.JobResult.toJobExecutionResult(JobResult.java:146)\n\tat org.apache.flink.client.deployment.ClusterClientJobClientAdapter.lambda$getJobExecutionResult$6(ClusterClientJobClientAdapter.java:128)\n\t... 23 more\n</div>\n        </div>\n    </div>\n</div>\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/ffa4084e99e5c19c44a6fa5a87135d2b",
+              "$$hashKey": "object:18687"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_773788624",
+      "id": "20230801-204516_383058329",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "ABORT",
+      "$$hashKey": "object:186",
+      "dateFinished": "2023-08-01T21:29:09+0000",
+      "dateStarted": "2023-08-01T21:28:19+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to generate CTR traffic\nDROP TEMPORARY TABLE IF EXISTS tmpanomalydetectionstream;\n\nCREATE TEMPORARY TABLE tmpanomalydetectionstream (\n    `rowtime` TIMESTAMP,\n    `ctrpercent` DOUBLE,\n    `anomaly_score` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'anomalydetectionstream',\n  'aws.region' = 'us-east-1',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:28:36+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_2124527179",
+      "id": "20230801-204516_1177399250",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:187",
+      "dateFinished": "2023-08-01T21:28:36+0000",
+      "dateStarted": "2023-08-01T21:28:36+0000"
+    },
+    {
+      "text": "%flink.ssql(type=update, parallelism=1)\ninsert into tmpanomalydetectionstream select to_timestamp(from_unixtime(`time`)) as rowtime, ctr as ctrpercent, score as anomaly_score from tmpdestinationstream where score>1;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:29:35+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/c3a454a0d63f7f8f05e6c91f6d371064",
+              "$$hashKey": "object:18856"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717010_2001357710",
+      "id": "20230801-204516_1094651450",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "RUNNING",
+      "$$hashKey": "object:188",
+      "dateFinished": "2023-08-01T21:29:03+0000",
+      "dateStarted": "2023-08-01T21:29:36+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create table to detect anomalies\nDROP TABLE IF EXISTS anomalydetectionstream;\n\nCREATE TABLE anomalydetectionstream (\n    `rowtime` TIMESTAMP,\n    `ctrpercent` DOUBLE,\n    `anomaly_score` DOUBLE\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'anomalydetectionstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'json'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:29:40+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "Table has been dropped.\nTable has been created.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717011_1287461280",
+      "id": "20230801-204516_46868688",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "FINISHED",
+      "$$hashKey": "object:189",
+      "dateFinished": "2023-08-01T21:29:41+0000",
+      "dateStarted": "2023-08-01T21:29:40+0000"
+    },
+    {
+      "text": "%flink.ssql\nselect * from anomalydetectionstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T21:29:50+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "rowtime": "string",
+                      "ctrpercent": "string",
+                      "anomaly_score": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "msg": [
+          {
+            "data": "rowtime\tctrpercent\tanomaly_score\n2023-08-01 20:59:50.000000\t411.1\t1.190813347560562\n2023-08-01 21:00:20.000000\t500.0\t1.9357564315520763\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n2023-08-01 21:00:20.000000\t500.0\t1.523778277987814\n",
+            "type": "TABLE"
+          }
+        ]
+      },
+      "apps": [],
+      "runtimeInfos": {
+        "jobUrl": {
+          "propertyName": "jobUrl",
+          "label": "FLINK JOB",
+          "tooltip": "View in Flink web UI",
+          "group": "flink",
+          "values": [
+            {
+              "jobUrl": "/flinkdashboard/#/job/488d437fc6b262f151f1aa2a6268a842",
+              "$$hashKey": "object:19307"
+            }
+          ],
+          "interpreterSettingId": "flink"
+        }
+      },
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717011_1818207918",
+      "id": "20230801-204516_1009531097",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "RUNNING",
+      "$$hashKey": "object:190",
+      "dateStarted": "2023-08-01T21:29:46+0000"
+    },
+    {
+      "text": "%flink.ssql\n-- create temporary table to generate CTR traffic\nDROP TEMPORARY TABLE IF EXISTS rawanomalydetectionstream;\n\nCREATE TEMPORARY TABLE rawanomalydetectionstream (\n    `rawdata` STRING\n) \n WITH (\n  'connector' = 'kinesis',\n  'stream' = 'anomalydetectionstream',\n  'aws.region' = 'us-east-1',\n  'scan.stream.initpos' = 'TRIM_HORIZON',\n  'format' = 'raw'\n);",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T20:49:37+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717011_358228299",
+      "id": "20230801-204516_391402417",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "READY",
+      "$$hashKey": "object:191"
+    },
+    {
+      "text": "%flink.ssql\nselect * from rawanomalydetectionstream;",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T20:49:47+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717011_2124583797",
+      "id": "20230801-204516_782483903",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "READY",
+      "$$hashKey": "object:192"
+    },
+    {
+      "text": "%flink.ssql\n",
+      "user": "anonymous",
+      "dateUpdated": "2023-08-01T20:49:51+0000",
+      "progress": 0,
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/sql",
+        "colWidth": 12,
+        "editorHide": false,
+        "fontSize": 9,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1690922717011_1134350327",
+      "id": "20230801-204516_1970663699",
+      "dateCreated": "2023-08-01T20:45:17+0000",
+      "status": "READY",
+      "$$hashKey": "object:193"
+    }
+  ],
+  "name": "kda_realtime_inetractive_streaming_notebook",
+  "id": "2J6EUZC6B",
+  "defaultInterpreterGroup": "flink",
+  "version": "0.10.1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {},
+  "path": "/kda_realtime_inetractive_streaming_notebook"
+}
