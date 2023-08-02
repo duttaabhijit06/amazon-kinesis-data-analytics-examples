@@ -1,7 +1,7 @@
 ﻿{
   "paragraphs": [
     {
-      "text": "%flink.ssql\n-- create temporary table to capture website traffic\nDROP TEMPORARY TABLE IF EXISTS website_visit;\n\nCREATE TEMPORARY TABLE website_visit (\n   `browseraction` STRING,\n   `site`          STRING,\n   `rowtime`       TIMESTAMP(3) METADATA FROM 'timestamp',\n   WATERMARK FOR rowtime AS rowtime - INTERVAL '0' SECOND\n) \n WITH (\n   'connector' = 'kinesis',\n   'stream' = 'ticker',\n   'aws.region' = 'us-east-1',\n   'scan.stream.initpos' = 'TRIM_HORIZON',\n   'format' = 'json'\n);",
+      "text": "%flink.ssql\n-- create temporary table to capture website traffic\nDROP TEMPORARY TABLE IF EXISTS website_visit;\n\nCREATE TEMPORARY TABLE website_visit (\n   `browseraction` STRING,\n   `site`          STRING,\n   `rowtime`       TIMESTAMP(3) METADATA FROM 'timestamp',\n   WATERMARK FOR rowtime AS rowtime - INTERVAL '0' SECOND\n) \n WITH (\n   'connector' = 'kinesis',\n   'stream' = 'websitevisits',\n   'aws.region' = 'us-east-1',\n   'scan.stream.initpos' = 'TRIM_HORIZON',\n   'format' = 'json'\n);",
       "user": "anonymous",
       "dateUpdated": "2023-08-01T20:56:56+0000",
       "progress": 0,
