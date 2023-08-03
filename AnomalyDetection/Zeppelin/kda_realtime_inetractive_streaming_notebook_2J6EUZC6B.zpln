@@ -853,7 +853,7 @@
       "$$hashKey": "object:12664"
     }
   ],
-  "name": "sql_flink_deployable_notebook",
+  "name": "kda_realtime_inetractive_streaming_notebook",
   "id": "2J7N7E4DB",
   "defaultInterpreterGroup": "flink",
   "version": "0.10.1",
@@ -866,5 +866,5 @@
     "personalizedMode": "false"
   },
   "info": {},
-  "path": "/sql_flink_deployable_notebook"
+  "path": "/kda_realtime_inetractive_streaming_notebook"
 }
