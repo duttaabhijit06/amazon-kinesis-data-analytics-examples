@@ -47,6 +47,21 @@ Resources:
     Type: AWS::S3::Bucket
   ProcessedS3Bucket:
     Type: AWS::S3::Bucket
+  FirehoseDeliveryStream:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      # DeliveryStreamType: "KinesisStreamAsSource"
+      # KinesisStreamSourceConfiguration: 
+      #     KinesisStreamARN: !GetAtt TickerStream.Arn
+      #     RoleARN: !GetAtt S3Role.Arn
+      S3DestinationConfiguration:
+        BucketARN: !Sub arn:aws:s3:::${RawS3Bucket}
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 50
+        CompressionFormat: GZIP
+        Prefix: weblogs/raw/
+        RoleARN: !GetAtt S3Role.Arn
   S3Role:
     Type: AWS::IAM::Role
     Properties:
@@ -71,9 +86,12 @@ Resources:
                 Effect: Allow
                 Action:
                   - "s3:*"
+                  - "kinesis:*"
+                  - "kinesisanalytics:*"
                 Resource:
                   - !Sub arn:aws:s3:::${RawS3Bucket}
                   - !Sub arn:aws:s3:::${RawS3Bucket}/*
+                  - '*'
         -
           PolicyName: CloudWatch
           PolicyDocument:
@@ -478,15 +496,9 @@ Resources:
             Version: "2012-10-17"
             Statement:
               - Effect: Allow
-                Action: s3:DeleteObject
+                Action: s3:*
                 Resource:
-                  - !Sub arn:aws:s3:::${RawS3Bucket}/*
-                  - !Sub arn:aws:s3:::${ProcessedS3Bucket}/*
-              - Effect: Allow
-                Action: s3:ListBucket
-                Resource:
-                  - !Sub arn:aws:s3:::${RawS3Bucket}
-                  - !Sub arn:aws:s3:::${ProcessedS3Bucket}
+                  - '*'
               - Effect: Allow
                 Action: logs:CreateLogGroup
                 Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*
@@ -994,6 +1006,13 @@ Resources:
                   - kinesisanalytics:*
                 Resource:
                   - '*'
+  
+  EmptyArtifactS3Bucket:
+    Type: "Custom::EmptyS3Bucket"
+    Properties:
+      ServiceToken: !GetAtt S3BucketHandler.Arn
+      Bucket: !Ref ArtifactBucket
+
 Outputs:
   KinesisDataGeneratorUrl:
     Description: The URL for your Kinesis Data Generator.
