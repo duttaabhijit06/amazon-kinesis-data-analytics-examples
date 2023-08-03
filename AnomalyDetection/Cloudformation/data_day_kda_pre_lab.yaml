@@ -799,7 +799,7 @@ Resources:
   TickerStream:
     Type: 'AWS::Kinesis::Stream'
     Properties:
-      Name: !Sub 'websitevisits'
+      Name: !Sub 'ticker'
       ShardCount: 1
   
   ClickStream:
@@ -832,10 +832,21 @@ Resources:
       Name: !Sub 'anomalydetectionstream'
       ShardCount: 1
 
-  KDAFlinkApplication:
+  RCFAnomalyDetectionApplicationLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub ${AWS::StackName}-RCFAnomalyDetectionApplication-LogGroup
+
+  RCFAnomalyDetectionApplicationLogStream:
+    Type: AWS::Logs::LogStream
+    Properties:
+      LogGroupName: !Ref RCFAnomalyDetectionApplicationLogGroup
+      LogStreamName: !Sub ${AWS::StackName}-RCFAnomalyDetectionApplication-LogStream
+
+  RCFAnomalyDetectionApplication:
     Type: 'AWS::KinesisAnalyticsV2::Application'
     Properties:
-      ApplicationName: !Sub '${AWS::StackName}-rcfExample'
+      ApplicationName: !Sub '${AWS::StackName}-RCFAnomalyDetectionApplication'
       ApplicationDescription: >-
         This application computes anomaly score via RandomCutForest algorithm
       RuntimeEnvironment: FLINK-1_15
@@ -857,11 +868,28 @@ Resources:
           PropertyGroups:
             - PropertyGroupId: RcfExampleEnvironment
               PropertyMap:
-                region: !Sub ${AWS::Region}'
+                region: !Sub ${AWS::Region}
                 initialPosition: !Sub 'TRIM_HORIZON'
                 inputStreamName: !Ref CtrStream
                 outputStreamName: !Ref DestinationStream
     DependsOn: BuildCompleteWaitCondition
+  
+  RCFAnomalyDetectionApplicationCloudWatchLoggingOption:
+    Type: AWS::KinesisAnalyticsV2::ApplicationCloudWatchLoggingOption
+    Properties:
+      ApplicationName: !Ref RCFAnomalyDetectionApplication
+      CloudWatchLoggingOption:
+        LogStreamARN: 
+          Fn::Join:
+          - ":"
+          - 
+            - arn:aws:logs
+            - Ref: AWS::Region
+            - Ref: AWS::AccountId
+            - log-group
+            - Ref: RCFAnomalyDetectionApplicationLogGroup
+            - log-stream
+            - Ref: RCFAnomalyDetectionApplicationLogStream
 
   ServiceExecutionRole:
     Type: 'AWS::IAM::Role'
@@ -887,15 +915,12 @@ Resources:
               - Effect: Allow
                 Action:
                   - 'kinesis:*'
+                  - 'logs:*'
                 Resource:
                   - !GetAtt DestinationStream.Arn
               - Effect: Allow
                 Action:
-                  - 'logs:CreateLogStream'
-                  - 'logs:CreateLogGroup'
-                  - 'logs:PutDestination'
-                  - 'logs:CreateLogDelivery'
-                  - 'logs:PutLogEvents'
+                  - 'logs:*'
                 Resource: '*'
               - Effect: Allow
                 Action:
@@ -905,10 +930,11 @@ Resources:
                   - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/flink-random-cut-forest-example-1.0.jar'
                   - ArtifactBucketPlaceholder: !Ref ArtifactBucket
   
-  AnomalyDetectionApplication:
+  AnomalyDetectionApplicationNotebook:
     Type: AWS::KinesisAnalyticsV2::Application
     Properties:
       ApplicationMode: INTERACTIVE
+      ApplicationName: !Sub '${AWS::StackName}-AnomalyDetectionApplicationNotebook'
       RuntimeEnvironment: ZEPPELIN-FLINK-3_0
       ServiceExecutionRole: !GetAtt KinesisAnalyticsServiceExecutionRole.Arn
       ApplicationConfiguration:
