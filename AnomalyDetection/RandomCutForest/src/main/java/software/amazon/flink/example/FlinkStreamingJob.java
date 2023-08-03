@@ -71,8 +71,8 @@ public class FlinkStreamingJob {
                 RandomCutForestOperator.<InputData, OutputData>builder()
                         .setDimensions(1)
                         .setShingleSize(1)
-                        .setSampleSize(12)
-                        .setNumberOfTrees(100)
+                        .setSampleSize(10)
+                        .setNumberOfTrees(5)
                         .setInputDataMapper((inputData) -> new double[]{inputData.getCtr()})
                         .setResultMapper(((inputData, score) -> new OutputData(inputData.getTime(), inputData.getCtr(), score)))
                         .build();
