@@ -87,7 +87,7 @@ Resources:
                   - 's3:ListBucket'
                   - 's3:GetObject'
                 Resource: !Sub
-                  - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/flink-random-cut-forest-example-1.0.jar'
+                  - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/*'
                   - ArtifactBucketPlaceholder: !Ref ArtifactBucket
               - Effect: Allow
                 Action:
@@ -189,7 +189,7 @@ Resources:
               commands:
                 - 'cd amazon-kinesis-data-analytics-examples-* || :'
                 - 'cd AnomalyDetection/RandomCutForest || :'
-                - mvn clean package -B -Dflink.version=${FlinkVersion}
+                - mvn clean package --B -Dflink.version=${FlinkVersion}
 
           artifacts:
             files:
@@ -463,7 +463,7 @@ Resources:
                   - 's3:ListBucket'
                   - 's3:GetObject'
                 Resource: !Sub
-                  - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/flink-random-cut-forest-example-1.0.jar'
+                  - 'arn:aws:s3:::${ArtifactBucketPlaceholder}/*'
                   - ArtifactBucketPlaceholder: !Ref ArtifactBucket
   
   RealtimeApplicationNotebook:
@@ -498,6 +498,11 @@ Resources:
                 GroupId: software.amazon.msk
                 ArtifactId: aws-msk-iam-auth
                 Version: 1.1.6
+            - ArtifactType: "UDF"
+              S3ContentLocation:
+                BucketARN: !Sub 'arn:aws:s3:::${ArtifactBucket}'
+                FileKey: 'flink-random-cut-forest-example-1.0.jar'
+    DependsOn: BuildCompleteWaitCondition
 
   GlueDatabase:
     Type: AWS::Glue::Database
@@ -528,6 +533,7 @@ Resources:
                   - glue:*
                   - kinesis:*
                   - kinesisanalytics:*
+                  - s3:*
                 Resource:
                   - '*'
   InboundStreamLambdaFunctionEventSourceMapping:
