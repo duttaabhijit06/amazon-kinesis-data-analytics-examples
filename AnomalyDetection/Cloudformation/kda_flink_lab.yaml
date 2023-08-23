@@ -335,7 +335,7 @@ Resources:
   TickerStream:
     Type: 'AWS::Kinesis::Stream'
     Properties:
-      Name: !Sub 'ticker'
+      Name: !Sub 'tickerstream'
       ShardCount: 1
   
   ClickStream:
