@@ -17,29 +17,29 @@ public class RandomCutForestUDF extends ScalarFunction{
     }
     public static void main (String[] args) throws java.lang.Exception
 	{ 
-        System.out.println(calculateAnomalyScore(100000));
-		System.out.println(calculateAnomalyScore(10000));
-        System.out.println(calculateAnomalyScore(5000));
-        System.out.println(calculateAnomalyScore(1000));
-        System.out.println(calculateAnomalyScore(500));
+        int[] values = {1000000, 100000, 10000, 1000, 100, 10};
+        for (int value : values){
+            System.out.println(value + ":" + calculateAnomalyScore(value));
+        }
  	}
 
  	private static double calculateAnomalyScore(float value){
         double score = Double.parseDouble("0");
         RandomCutForest forest = RandomCutForest.builder()
         .numberOfTrees(5)
-        .sampleSize(5)
+        .sampleSize(10)
         .dimensions(1)
         .timeDecay(100000)
         .shingleSize(1)
         .build();    
-        double valueLen = (Float.toString(value)).length() * 100;
-        for (int i=0; i<valueLen; i++){
-            for (int j=0; j<(valueLen/100); j++){                    
-                float[] point = new float[]{value * j};
-                score = forest.getAnomalyScore(point);
-                forest.update(point);
-            }
+        double valueLen = (Float.toString(value)).length();
+        double loopCounter = (((value-valueLen)*10)+valueLen)/valueLen;
+        for (int i=0; i<loopCounter; i++){
+            // for (int j=0; j<(valueLen/100)/5; j++){                    
+            float[] point = new float[]{i};
+            score = forest.getAnomalyScore(point);
+            forest.update(point);
+            // }
         }
         return score;
     }
