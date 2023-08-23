@@ -17,7 +17,7 @@ public class RandomCutForestUDF extends ScalarFunction{
     }
     public static void main (String[] args) throws java.lang.Exception
 	{ 
-        int[] values = {1000000, 100000, 10000, 1000, 100, 10};
+        int[] values = {2000, 1000, 100, 10, 5, 1};
         for (int value : values){
             System.out.println(value + ":" + calculateAnomalyScore(value));
         }
@@ -32,14 +32,14 @@ public class RandomCutForestUDF extends ScalarFunction{
         .timeDecay(100000)
         .shingleSize(1)
         .build();    
-        double valueLen = (Float.toString(value)).length();
-        double loopCounter = (((value-valueLen)*10)+valueLen)/valueLen;
-        for (int i=0; i<loopCounter; i++){
-            // for (int j=0; j<(valueLen/100)/5; j++){                    
-            float[] point = new float[]{i};
-            score = forest.getAnomalyScore(point);
-            forest.update(point);
-            // }
+        double divider = (Float.toString(value).length());
+        // System.out.println(value + ":" + Float.toString(value).length());
+        if (value > 1){
+            for (int i=0; i<divider; i++){                  
+                float[] point = new float[]{i};
+                score = (forest.getAnomalyScore(point) * divider);
+                forest.update(point);
+            }
         }
         return score;
     }
